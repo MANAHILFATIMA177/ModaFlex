@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="An accessibility-first interface that adapts to mouse, touch, keyboard, voice, gesture and eye control.">
+<meta name="theme-color" content="#0f766e">
+<title>Adaptive UI Modality Engine</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🎛️%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;600;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="mode-mouse">
+<div class="wrap">
+  <header>
+    <div>
+      <p class="eyebrow">Accessibility-first UI</p>
+      <h1>Adaptive UI Modality Engine</h1>
+      <p class="sub">An interface that notices how you are interacting and reshapes itself: bigger targets for fingers, strong focus rings for keyboards, spoken control for hands-free use and dwell-to-click for eye control.</p>
+      <div class="chips"><span>🖱️ Mouse</span><span>👆 Touch</span><span>⌨️ Keyboard</span><span>🎙️ Voice</span><span>🤚 Gesture</span><span>👁️ Eye</span></div>
+    </div>
+    <div class="tools">
+      <label for="scale" class="hint">Text size</label>
+      <input type="range" id="scale" min="85" max="140" value="100" aria-label="Text size">
+      <button class="btn alt" id="themeBtn" type="button">Toggle theme</button>
+    </div>
+  </header>
+
+  <section class="who" aria-label="Who this helps">
+    <div><b>People with limited hand movement</b><span>Eye dwell-click, voice commands and large targets let them operate the page without a precise mouse.</span></div>
+    <div><b>Hands-free situations</b><span>Cooking, using a public kiosk or wearing gloves: speak or wave instead of touching the screen.</span></div>
+    <div><b>Everyone else</b><span>Phones get thumb-sized buttons and desktops stay compact, with no settings needed.</span></div>
+  </section>
+
+  <div class="grid">
+    <main>
+      <section class="panel">
+        <div class="status" id="status" style="padding:0 0 0 16px">
+          <div class="icon" id="icon" aria-hidden="true">🖱️</div>
+          <div>
+            <p class="name" id="modalityBadge" aria-live="polite">Mouse</p>
+            <p class="why" id="why">Fine pointer: compact layout with hover effects.</p>
+          </div>
+        </div>
+
+        <div class="stage">
+          <div class="row">
+            <button class="btn" data-act="Saved">Save changes</button>
+            <button class="btn alt" data-act="Draft created">New draft</button>
+            <button class="btn danger" data-act="Deleted">Delete</button>
+          </div>
+          <div class="field">
+            <label for="name">Project name</label>
+            <input type="text" id="name" placeholder="Type here to try the field size">
+          </div>
+          <button class="sw" id="sw" role="switch" aria-checked="false" type="button"><span class="track"></span>Email notifications</button>
+          <div>
+            <label class="chk"><input type="checkbox"> Review layout</label>
+            <label class="chk"><input type="checkbox"> Test on a phone</label>
+          </div>
+          <div class="voice">
+            <button class="btn mic" id="mic" type="button" aria-pressed="false">🎙️ Start listening</button>
+            <label class="chk"><input type="checkbox" id="speak" checked> Speak replies</label>
+            <p class="heard" id="heard" aria-live="polite">Say "help" to hear the commands.</p>
+          </div>
+          <p class="hint mouse-only" id="hoverHint">Hover over a button to see the hover highlight (mouse only).</p>
+          <p class="hint kbd-only">Keyboard mode: use Tab and Shift+Tab to move, Space or Enter to activate. The orange ring shows where you are.</p>
+        </div>
+      </section>
+      <section class="panel" style="margin-top:20px">
+        <h2>Playground: one gallery, every input</h2>
+        <div id="slide" aria-live="polite"><div class="big" id="sEmoji"></div><div class="cap" id="sCap"></div></div>
+        <div class="dots" id="dots"></div>
+        <div class="row">
+          <button class="btn alt" id="prev" type="button">← Previous</button>
+          <button class="btn" id="like" type="button">♡ Like <span id="likeN">0</span></button>
+          <button class="btn alt" id="next" type="button">Next →</button>
+        </div>
+        <p class="hint">Click the buttons, swipe the card, press ← →, say "next", "previous" or "like", or dwell your gaze on a button.</p>
+      </section>
+
+      <section class="panel" style="margin-top:20px">
+        <h2>Gesture pad</h2>
+        <div id="pad" tabindex="0" aria-label="Gesture pad. Swipe, pinch, double tap or press and hold.">
+          <div class="glyph" id="glyph">✋</div>
+          <div id="gdesc" class="hint">Swipe, pinch, double tap or press and hold here</div>
+        </div>
+        <ul class="gmap"><li>← → switch input mode</li><li>↑ ↓ or pinch: text size</li><li>Double tap: toggle theme</li><li>Hold: microphone on/off</li></ul>
+      </section>
+
+      <section class="panel" style="margin-top:20px">
+        <h2>Eye control and camera</h2>
+        <div class="row">
+          <button class="btn" id="eyeBtn" type="button">👁 Start eye control</button>
+          <button class="btn alt" id="camBtn" type="button">📷 Start camera</button>
+          <button class="btn alt" id="recenter" type="button">⌖ Re-center</button>
+        </div>
+        <div class="stage">
+          <label class="chk"><input type="checkbox" id="simGaze" checked> Mouse or finger simulates gaze</label>
+          <div class="field"><label for="dwell" id="dwellLbl">Dwell time: 1.2 s</label><input type="range" id="dwell" min="600" max="2500" step="100" value="1200"></div>
+          <div class="field"><label for="gain" id="gainLbl">Head sensitivity: 2.4×</label><input type="range" id="gain" min="1" max="4" step="0.2" value="2.4"></div>
+          <div id="camBox"></div>
+          <div class="tiles" id="tiles"></div>
+          <div class="phrase-row">
+            <input type="text" id="newPhrase" maxlength="40" placeholder="Add your own phrase" aria-label="New phrase">
+            <button class="btn" id="addPhrase" type="button">Add</button>
+            <button class="btn alt" id="removePhrase" type="button">Remove last</button>
+            <button class="btn alt" id="resetPhrases" type="button">Reset</button>
+          </div>
+          <p class="hint" id="said">Eye keypad: look at a tile until the ring fills and it will speak the phrase.</p>
+          <p class="hint" id="eyeMsg">The camera uses motion, not pupil tracking: wave left or right to switch modes. In Eye mode, moving your head steers the pointer.</p>
+        </div>
+      </section>
+    </main>
+
+    <aside class="panel">
+      <h2>Mission: unlock all inputs <span id="qCount" class="hint">0/6</span></h2>
+      <div class="bar"><i id="qBar"></i></div>
+      <ul class="quest" id="quest"></ul>
+      <h2>Input mode</h2>
+      <div class="seg" id="seg" role="group" aria-label="Choose input mode">
+        <button type="button" data-m="auto" aria-pressed="true">Auto</button>
+        <button type="button" data-m="mouse" aria-pressed="false">Mouse</button>
+        <button type="button" data-m="touch" aria-pressed="false">Touch</button>
+        <button type="button" data-m="keyboard" aria-pressed="false">Keyboard</button>
+        <button type="button" data-m="voice" aria-pressed="false">Voice</button>
+        <button type="button" data-m="gesture" aria-pressed="false">Gesture</button>
+        <button type="button" data-m="eye" aria-pressed="false">Eye</button>
+      </div>
+
+      <div class="counts">
+        <div class="count"><b id="cMouse">0</b><span>Mouse switches</span></div>
+        <div class="count"><b id="cTouch">0</b><span>Touch switches</span></div>
+        <div class="count"><b id="cKey">0</b><span>Keyboard switches</span></div>
+        <div class="count"><b id="cVoice">0</b><span>Voice switches</span></div>
+        <div class="count"><b id="cGest">0</b><span>Gesture switches</span></div>
+        <div class="count"><b id="cEye">0</b><span>Eye switches</span></div>
+      </div>
+
+      <h2>Active rules</h2>
+      <ul class="rules" id="rules">
+        <li data-r="mouse">Mouse: compact controls, hover highlights</li>
+        <li data-r="touch">Touch: 60px targets, wide spacing, no hover</li>
+        <li data-r="keyboard">Keyboard: thick orange focus ring</li>
+        <li data-r="gesture">Gesture: swipe, pinch, tap and hold, 56px targets</li>
+        <li data-r="eye">Eye: 76px targets, dwell-to-click gaze pointer</li>
+        <li data-r="voice">Voice: mic-first layout, spoken replies, 52px targets</li>
+      </ul>
+
+      <h2>Diagnostics</h2>
+      <dl class="signals" id="signals"></dl>
+
+      <h2>Event log</h2>
+      <ul class="log" id="log" aria-live="off"><li><span>Waiting for input…</span></li></ul>
+      <div class="tools" style="margin-top:12px"><button class="btn alt" id="clear" type="button">Clear log</button></div>
+    </aside>
+  </div>
+</div>
+<footer>
+  <span>Adaptive UI Modality Engine · MIT License · vanilla HTML, CSS and JavaScript</span>
+  <a href="https://github.com/YOUR-USERNAME/adaptive-ui" target="_blank" rel="noopener">View on GitHub</a>
+</footer>
+<div id="gaze" aria-hidden="true"></div>
+<div class="toast" id="toast" role="status"></div>
+
+<script src="js/core.js"></script>
+<script src="js/voice.js"></script>
+<script src="js/gestures-eye.js"></script>
+<script src="js/gallery.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>
